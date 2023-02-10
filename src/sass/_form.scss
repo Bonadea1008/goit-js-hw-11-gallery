@@ -1,0 +1,12 @@
+.search-form {
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  transform: translate(-50%, 0);
+}
+
+.search-form input {
+  outline: none;
+  border-color: inherit;
+  border-radius: 5px;
+}

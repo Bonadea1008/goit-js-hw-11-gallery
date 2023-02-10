@@ -1,0 +1,18 @@
+.btn {
+  width: 100px;
+  background-color: white;
+  outline: none;
+  border-color: inherit;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.load-more {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.btn.is-hidden {
+  display: none;
+}

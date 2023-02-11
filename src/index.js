@@ -24,20 +24,24 @@ function onSearchQuery(e) {
 
   apiService.query = e.currentTarget.elements.searchQuery.value;
 
-  // if (apiService.query === '') {
-  //   refs.loadMoreBtn.classList.add('is-hidden');
-  //   return;
-  // }
+  if (apiService.query === '') {
+    refs.loadMoreBtn.classList.add('is-hidden');
+    return;
+  }
 
   apiService.resetPage();
   apiService.fetchImages().then(data => {
     let totalPages = Math.ceil(data.totalHits / perPage);
     apiService.hits = data.totalHits;
 
-    if (data.hits.length === 0) {
+    if (!data.totalHits) {
       return Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+    }
+
+    if (apiService.query === apiService.query) {
+      apiService.queryPage = 1;
     }
 
     Notify.success(`Hooray! We found ${data.totalHits} images.`);
@@ -56,6 +60,15 @@ function onLoadMoreSearch(e) {
     let totalPages = Math.ceil(data.totalHits / perPage);
     apiService.incrementPage();
     renderCards(data.hits);
+
+    const { height: cardHeight } = document
+      .querySelector('.gallery_container')
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 1.7,
+      behavior: 'smooth',
+    });
 
     if (apiService.queryPage >= totalPages) {
       refs.loadMoreBtn.classList.add('is-hidden');

@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import refs from './js/refs';
+import { refs } from './js/refs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import ApiService from './js/API-service';
@@ -32,7 +32,6 @@ function onSearchQuery(e) {
   apiService.resetPage();
   apiService.fetchImages().then(data => {
     apiService.hits = data.totalHits;
-    console.log(data.totalHits);
 
     if (data.hits.length === 0) {
       refs.loadMoreBtn.classList.add('is-hidden');

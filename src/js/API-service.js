@@ -15,7 +15,6 @@ export default class ApiService {
       const response = await axios.get(
         `${BASE_URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.queryPage}`
       );
-      this.incrementPage();
       return response.data;
     } catch (error) {
       console.log('ERROR: ' + error);

@@ -56,9 +56,9 @@ function onSearchQuery(e) {
 }
 
 function onLoadMoreSearch(e) {
+  apiService.incrementPage();
   apiService.fetchImages().then(data => {
     let totalPages = Math.ceil(data.totalHits / perPage);
-    apiService.incrementPage();
     renderCards(data.hits);
 
     const { height: cardHeight } = document

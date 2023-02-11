@@ -4,7 +4,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import ApiService from './js/API-service';
 
-const hitsPerPage = 40;
+const perPage = 40;
 const apiService = new ApiService();
 const lightbox = new SimpleLightbox('.gallery_container a', {
   captions: true,
@@ -24,18 +24,17 @@ function onSearchQuery(e) {
 
   apiService.query = e.currentTarget.elements.searchQuery.value;
 
-  if (apiService.query === '') {
-    refs.loadMoreBtn.classList.add('is-hidden');
-    return;
-  }
+  // if (apiService.query === '') {
+  //   refs.loadMoreBtn.classList.add('is-hidden');
+  //   return;
+  // }
 
   apiService.resetPage();
   apiService.fetchImages().then(data => {
+    let totalPages = Math.ceil(data.totalHits / perPage);
     apiService.hits = data.totalHits;
 
     if (data.hits.length === 0) {
-      refs.loadMoreBtn.classList.add('is-hidden');
-
       return Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
@@ -44,19 +43,25 @@ function onSearchQuery(e) {
     Notify.success(`Hooray! We found ${data.totalHits} images.`);
     renderCards(data.hits);
     refs.loadMoreBtn.classList.remove('is-hidden');
+
+    if (apiService.queryPage >= totalPages) {
+      refs.loadMoreBtn.classList.add('is-hidden');
+      Notify.info("We're sorry, but you've reached the end of search results.");
+    }
   });
 }
 
 function onLoadMoreSearch(e) {
   apiService.fetchImages().then(data => {
-    apiService.hits = data.totalHits;
+    let totalPages = Math.ceil(data.totalHits / perPage);
     apiService.incrementPage();
     renderCards(data.hits);
 
-    console.log(hitsPerPage);
-    if (data.hits < hitsPerPage) {
+    if (apiService.queryPage >= totalPages) {
       refs.loadMoreBtn.classList.add('is-hidden');
-      Notify.info("We're sorry, but you've reached the end of search results.");
+      return Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
   });
 }
